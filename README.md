@@ -191,3 +191,143 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 6. [ ] Analytics y monitoring
 
 ---
+
+
+### Rama que **SIEMPRE debe estar actualizada**:
+
+1. **`develop`** (rama de integración principal):
+   - *Por qué*: Todas las features nuevas deben integrarse aquí primero
+   - *Cómo mantenerla*:
+     ```bash
+     git checkout develop
+     git pull origin develop
+     ```
+   - *Flujo*: Todas las ramas feature deben nacer de aquí y mergearse aquí
+
+### Ramas para clonar según propósito:
+
+| Propósito               | Rama origen       | Ejemplo de comando                     |
+|-------------------------|-------------------|----------------------------------------|
+| **Desarrollo normal**   | `develop`         | `git clone -b develop <repo-url>`      |
+| **Pre-producción**      | `staging`         | `git clone -b staging <repo-url>`      |
+| **Producción**          | `main`            | `git clone -b main <repo-url>`         |
+| **Pruebas con datos reales** | `green`    | `git clone -b green <repo-url>`        |
+| **Pruebas sin datos**   | `sandbox`         | `git clone -b sandbox <repo-url>`      |
+
+### Reglas de actualización clave:
+
+1. **`develop`**:
+   - Se actualiza diariamente con merges de features
+   - Nunca debe estar detrás de otras ramas
+
+2. **`staging`**:
+   - Se actualiza solo cuando preparas un release
+   ```bash
+   git checkout staging
+   git merge develop --no-ff  # Merge explícito
+   ```
+
+3. **`main`**:
+   - Solo se actualiza desde `staging` cuando hay release
+   ```bash
+   git checkout main
+   git merge staging --no-ff
+   git tag v1.0.0  # Ejemplo de tagging semántico
+   ```
+
+4. **`green`** (datos reales):
+   - Se actualiza periódicamente desde `main` (ej. semanalmente)
+   ```bash
+   git checkout green
+   git pull origin main --ff-only  # Solo fast-forward
+   ```
+
+5. **`sandbox`**:
+   - Se actualiza frecuentemente desde `develop`
+   ```bash
+   git checkout sandbox
+   git merge develop
+   ```
+
+### Buenas prácticas adicionales:
+
+1. **Para nuevos desarrollos**:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/nueva-funcionalidad
+   ```
+
+2. **Políticas recomendadas**:
+   - `main` y `staging` deben ser ramas protegidas
+   - `green` debe tener commits solo por fast-forward
+   - Usa `--no-ff` en merges a `staging` para mantener historia clara
+
+3. **Diagrama de actualización**:
+   ```
+   feature/* → develop → staging → main → green
+                      ↘ sandbox
+   ```
+
+Esta estructura garantiza que:
+- El desarrollo siempre parte del código más actual (`develop`)
+- Los entornos especializados tienen la base correcta
+- La producción (`main`) solo recibe código validado en `staging`
+- Las pruebas con datos reales (`green`) son fieles a producción
+
+# Script para Generar Módulos
+
+**permisos de ejecución:**
+
+```bash
+chmod +x src/config/module-generator.ts
+./src/config/module-generator.ts
+```
+
+**Para ejecutarlo:**
+```bash
+bun src/config/module-generator.ts
+```
+o
+
+```bash
+bun rsx:module
+```
+**Ejemplo:** 
+
+
+
+|🚀 | Generador de Módulos |
+|--  |--------------------------------------------------------|
+|📝 | Nombre del módulo (ej: auth, user, profile): dashboard  |
+|📋 | ¿Incluir schema de validación? (y/n): y  |
+|📦 | ¿Incluir tipos/types? (y/n): y |
+|🔄 | ¿Incluir contexto? (y/n): y |
+|🌐 | ¿Incluir API? (y/n): y |
+|📄 | ¿Incluir páginas? (y/n): y |
+|🧩 | ¿Incluir componentes? (y/n): y |
+|📂 | Carpeta principal creada: /home/user/projects/DEVELOP/bidilink_front/src/features/dashboard |
+|📋 | Schema generado en: /home/user/projects/DEVELOP/bidilink_front/src/features/dashboard/schemas |
+|📦 | Types generados en: /home/user/projects/DEVELOP/bidilink_front/src/features/dashboard/types.ts |
+|🔄 | Context generado en: /home/user/projects/DEVELOP/bidilink_front/src/features/dashboard/context |
+|🌐 | API generada en: /home/user/projects/DEVELOP/bidilink_front/src/features/dashboard/api |
+|📄 | Páginas generadas en: /home/user/projects/DEVELOP/bidilink_front/src/features/dashboard/pages |
+|🧩 | Componentes generados en: /home/user/projects/DEVELOP/bidilink_front/src/features/dashboard/components |
+
+
+
+```bash
+chmod +x src/config/view-generator.ts
+./src/config/view-generator.ts
+```
+
+**Para ejecutarlo:**
+```bash
+bun src/config/view-generator.ts
+```
+
+o
+
+```bash
+bun rsx:view
+```
