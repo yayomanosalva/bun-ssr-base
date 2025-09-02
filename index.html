@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      // Pasar variables de entorno al global scope
+      window.__ENV = {
+        DEV: true, // o false en producción
+        JWT_SECRET: "4jmNJNsWdBA7amUKgiTX1U03leHyuxQo",
+        // otras variables...
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
